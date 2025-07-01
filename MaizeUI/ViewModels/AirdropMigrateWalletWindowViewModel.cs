@@ -349,29 +349,29 @@ namespace MaizeUI.ViewModels
             if (MaizeFeeSelectedOption == "PEPE")
                 maizeMaxFeeTokenId = 272;
 
-            var maizeFee = await CalculateMaizeFee(LoopringService, auditInfo.validAddress.Count(), MaizeFeeSelectedOption);
+            var maizeFee = 0;
 
             //uncomment this asap
-            var maxFeeVolume = await loopringService.CobTransferTransactionFee(
-               settings.Environment,
-               Environment.Url,
-               Environment.Exchange,
-               settings.LoopringApiKey,
-               settings.LoopringPrivateKey,
-               settings.MMorGMEPrivateKey,
-               settings.LoopringAccountId,
-               maizeFee,
-               auditInfo.nftSentTotal,
-               LoopringFeeSelectedOption,
-               maxFeeTokenId,
-               Environment.MyAccountAddress,
-               settings.LoopringAddress,
-               0,
-               maizeMaxFeeTokenId,
-               MaizeFeeSelectedOption,
-               isCounterFactual
-               );
-            auditInfo.gasFeeTotal += maxFeeVolume;
+            //var maxFeeVolume = await loopringService.CobTransferTransactionFee(
+            //   settings.Environment,
+            //   Environment.Url,
+            //   Environment.Exchange,
+            //   settings.LoopringApiKey,
+            //   settings.LoopringPrivateKey,
+            //   settings.MMorGMEPrivateKey,
+            //   settings.LoopringAccountId,
+            //   maizeFee,
+            //   auditInfo.nftSentTotal,
+            //   LoopringFeeSelectedOption,
+            //   maxFeeTokenId,
+            //   Environment.MyAccountAddress,
+            //   settings.LoopringAddress,
+            //   0,
+            //   maizeMaxFeeTokenId,
+            //   MaizeFeeSelectedOption,
+            //   isCounterFactual
+            //   );
+            //auditInfo.gasFeeTotal += maxFeeVolume;
 
             var fileName = ApplicationUtilitiesUI.ShowAirdropAudit(auditInfo.validAddress, auditInfo.invalidAddress, auditInfo.banishAddress, auditInfo.invalidNftData, auditInfo.alreadyActivatedAddress, null, auditInfo.gasFeeTotal, LoopringFeeSelectedOption, maizeFee, MaizeFeeSelectedOption);
             sw.Stop();
@@ -382,7 +382,7 @@ namespace MaizeUI.ViewModels
         }
         private async void PreviewProcess()
         {
-            if (LoopringFeeSelectedOption == LoopringFeeDropdown[0] || MaizeFeeSelectedOption == MaizeFeeDropdown[0])
+            if (LoopringFeeSelectedOption == LoopringFeeDropdown[0])
             {
                 Log = "Select Fees";
                 return;
@@ -411,7 +411,7 @@ namespace MaizeUI.ViewModels
             string totalActivations = $"Transfers with wallet activation: {totalActivationsNumber}";
             var transferFees = (decimal.Parse((await LoopringService.GetNftOffChainFee(settings.LoopringApiKey, settings.LoopringAccountId, 11)).fees.First(x => x.token == LoopringFeeSelectedOption).fee) / 1000000000000000000) * totalTransfersNumber;
             var activationFees = (decimal.Parse((await LoopringService.GetNftOffChainFee(settings.LoopringApiKey, settings.LoopringAccountId, 19)).fees.First(x => x.token == LoopringFeeSelectedOption).fee) / 1000000000000000000) * totalActivationsNumber;
-            var maizeFee = await CalculateMaizeFee(LoopringService, allNfts.SelectMany(d => d).Count(), MaizeFeeSelectedOption); 
+            var maizeFee = 0; 
 
             var userAssets = await LoopringService.GetUserAssetsForFees(settings.LoopringApiKey, settings.LoopringAccountId);
             var eth = userAssets.FirstOrDefault(asset => asset.tokenId == 0);
@@ -430,7 +430,7 @@ namespace MaizeUI.ViewModels
             if (_isChecked == true)
                 Log = $"Your Assets:\r\n{userEth} ETH | {userLrc} LRC | {userPepe} PEPE\r\n\r\n{totalTransactions}{totalNfts}{totalWallets}\r\n\r\n{totalTransfers}\r\n{totalActivations}\r\n\r\nTransfer Fees: {transferFees} {LoopringFeeSelectedOption}\r\nActivation Fees: {activationFees} {LoopringFeeSelectedOption}\r\nMaize Fee: {maizeFee} {MaizeFeeSelectedOption}";
             else
-                Log = $"Your Assets:\r\n{userEth} ETH | {userLrc} LRC | {userPepe} PEPE\r\n\r\n{totalTransactions}{totalNfts}{totalWallets}\r\n\r\n{totalTransfers}\r\nTransfer Fees: {transferFees} {LoopringFeeSelectedOption}\r\nMaize Fee: {maizeFee} {MaizeFeeSelectedOption}";
+                Log = $"Your Assets:\r\n{userEth} ETH | {userLrc} LRC | {userPepe} PEPE\r\n\r\n{totalTransactions}{totalNfts}{totalWallets}\r\n\r\n{totalTransfers}\r\nTransfer Fees: {transferFees} {LoopringFeeSelectedOption}\r\n";
             switch (MaizeFeeSelectedOption)
             {
                 case "ETH":
@@ -526,7 +526,7 @@ namespace MaizeUI.ViewModels
         }
         private async void NftWalletSwap()
         {
-            if (LoopringFeeSelectedOption == LoopringFeeDropdown[0] || MaizeFeeSelectedOption == MaizeFeeDropdown[0] || newWallet == null)
+            if (LoopringFeeSelectedOption == LoopringFeeDropdown[0] || newWallet == null)
             {
                 if (newWallet == null)
                     Log = $"Please enter in an ENS or wallet address...";

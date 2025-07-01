@@ -7,7 +7,6 @@ using ReactiveUI;
 using System.Diagnostics;
 using System.Reactive;
 using Maize.Models.ApplicationSpecific;
-using OpenCvSharp;
 using MaizeUI.Helpers;
 
 namespace MaizeUI.ViewModels

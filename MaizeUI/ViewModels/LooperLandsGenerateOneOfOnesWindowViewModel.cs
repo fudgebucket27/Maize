@@ -10,7 +10,6 @@ using Maize.Services;
 using Maize;
 using System.Collections.ObjectModel;
 using Maize.Helpers;
-using OpenCvSharp;
 using System.Drawing.Printing;
 using Maize.Models.Responses;
 using System.Runtime.CompilerServices;

@@ -23,16 +23,10 @@
 	  <StackPanel IsVisible="{Binding IsLswTextBoxVisible}" Orientation="Horizontal" Margin="20 0 20 10">
 		  <ComboBox SelectedIndex="{Binding InputMode}" Margin="0 0 10 0" Width="150" VerticalAlignment="Top">
 			  <ComboBoxItem>Seed Phrase</ComboBoxItem>
-			  <ComboBoxItem>QR Code</ComboBoxItem>
 		  </ComboBox>
 		  <StackPanel Orientation="Vertical">
 			  <StackPanel Orientation="Horizontal" IsVisible="{Binding IsSeedPhraseMode}">
 				  <TextBox Text="{Binding EoaL1Key}" Margin="0 0 10 0" Watermark="L1 Key/Seed Phrase" Width="300" ToolTip.Tip="Enter your seed phrase"/>
-			  </StackPanel>
-			  <StackPanel Orientation="Horizontal" IsVisible="{Binding IsQrCodeMode}">
-				  <TextBox Text="{Binding LoopringAppPassCode}" Margin="0 0 10 0" Watermark="App Passcode" Width="150" ToolTip.Tip="Enter the app passcode"/>
-				  <TextBlock VerticalAlignment="Center" FontSize="15" Text="Export QR Code: " TextWrapping="Wrap"/>
-				  <Button Content="Browse" Click="BrowseButton_Click" VerticalAlignment="Center"/>
 			  </StackPanel>
 		  </StackPanel>
 	  </StackPanel>

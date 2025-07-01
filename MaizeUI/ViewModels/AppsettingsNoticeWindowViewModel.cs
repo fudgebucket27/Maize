@@ -7,7 +7,6 @@ using Maize.Services;
 using Maize.Models.Responses;
 using System.Security.Cryptography;
 using LoopringSmartWalletRecoveryPhraseExtractor;
-using OpenCvSharp;
 using Nethereum.HdWallet;
 using MaizeUI.Helpers;
 using NBitcoin;
@@ -122,7 +121,7 @@ namespace MaizeUI.ViewModels
             Notice = notice;
             Location = location;
             LoopringService = loopringService;
-            Maize.Helpers.Things.OpenUrl("https://loopring.io/#/trade/lite/LRC-ETH");
+            Maize.Helpers.Things.OpenUrl("https://loopring.io/#/pro");
             Watermark = $"Paste Account Information from Loopring.io > Avatar > Security > Export Account here and then the L1 Private Key/Image below if needed.\r\n\r\n Example:\r\n{{\r\n    \"address\": \"0x1fdfef87d387e4basdjfhtyghtugh19cff06a982\",\r\n    \"accountId\": 11233,\r\n    \"level\": \"\",\r\n    \"nonce\": 1,\r\n    \"apiKey\": \"miWgX3jDo5zubs1VwYrPShtF5ythgnbhggmczTOwzUrS280AaNtf6v8CuVmwfP4f\",\r\n    \"publicX\": \"0x12167dbhguty675ud3c11bae8a343c138cfc2574349235688ae2d6ce68320ac8\",\r\n    \"publicY\": \"0x1d7e0c7d92b894dc27943a0fghtyghvnfjb0db0dbcc47d42f2914d9b00b84fd3\",\r\n    \"privateKey\": \"0x2ad857be54b8d02badc842ac54e25f5ythgjt0pol50331cc4894509c09f255b\"\r\n}}\r\n";
             IsLswTextBoxVisible = false;
             IsEoaTextBoxVisible = false;
@@ -187,59 +186,59 @@ namespace MaizeUI.ViewModels
             }
             else
             {
-                if (string.IsNullOrEmpty(loopringAppPassCode) || string.IsNullOrEmpty(imagePath))
-                {
-                    IsEnabled = true;
-                    return;
-                }
+                //if (string.IsNullOrEmpty(loopringAppPassCode) || string.IsNullOrEmpty(imagePath))
+                //{
+                //    IsEnabled = true;
+                //    return;
+                //}
 
-                QrCodeJson qrCodeJson = null;
+                //QrCodeJson qrCodeJson = null;
 
-                // Read the image from the file
-                using Mat image = Cv2.ImRead(imagePath);
+                //// Read the image from the file
+                //using Mat image = Cv2.ImRead(imagePath);
 
-                // Initialize the QR code detector
-                QRCodeDetector qrCodeDetector = new QRCodeDetector();
+                //// Initialize the QR code detector
+                //QRCodeDetector qrCodeDetector = new QRCodeDetector();
 
-                // Detect the QR code
-                string decodedInfo = qrCodeDetector.DetectAndDecode(image, out Point2f[] points);
+                //// Detect the QR code
+                //string decodedInfo = qrCodeDetector.DetectAndDecode(image, out Point2f[] points);
 
-                // Check if the QR code has been detected
-                if (points != null && points.Length > 0)
-                {
-                    // Draw a polygon around the detected QR code
-                    Cv2.Polylines(image, new OpenCvSharp.Point[][] { points.Select(p => p.ToPoint()).ToArray() }, isClosed: true, color: OpenCvSharp.Scalar.Red);
+                //// Check if the QR code has been detected
+                //if (points != null && points.Length > 0)
+                //{
+                //    // Draw a polygon around the detected QR code
+                //    Cv2.Polylines(image, new OpenCvSharp.Point[][] { points.Select(p => p.ToPoint()).ToArray() }, isClosed: true, color: OpenCvSharp.Scalar.Red);
 
-                    // Display the detected and decoded information
-                    Notice = "QR Code Detected: " + decodedInfo;
-                    if (decodedInfo.Trim().Length > 0)
-                    {
-                        qrCodeJson = JsonConvert.DeserializeObject<QrCodeJson>(decodedInfo);
-                    }
-                }
-                else
-                {
-                    Notice = "QR Code Not Detected. Try a different image...";
-                    IsEnabled = true;
-                    return;
-                }
+                //    // Display the detected and decoded information
+                //    Notice = "QR Code Detected: " + decodedInfo;
+                //    if (decodedInfo.Trim().Length > 0)
+                //    {
+                //        qrCodeJson = JsonConvert.DeserializeObject<QrCodeJson>(decodedInfo);
+                //    }
+                //}
+                //else
+                //{
+                //    Notice = "QR Code Not Detected. Try a different image...";
+                //    IsEnabled = true;
+                //    return;
+                //}
 
-                byte[] mnemonic = Encoding.ASCII.GetBytes(qrCodeJson.mnemonic);
-                byte[] iv = Encoding.ASCII.GetBytes(qrCodeJson.iv);
-                byte[] salt = Encoding.ASCII.GetBytes(qrCodeJson.salt);
+                //byte[] mnemonic = Encoding.ASCII.GetBytes(qrCodeJson.mnemonic);
+                //byte[] iv = Encoding.ASCII.GetBytes(qrCodeJson.iv);
+                //byte[] salt = Encoding.ASCII.GetBytes(qrCodeJson.salt);
 
-                var layerOneKey = QRCodeDecrypt(mnemonic, iv, salt, loopringAppPassCode);
+                //var layerOneKey = QRCodeDecrypt(mnemonic, iv, salt, loopringAppPassCode);
 
-                if (layerOneKey == "You have entered the wrong passcode... try again!")
-                {
-                    Notice = layerOneKey;
-                    IsEnabled = true;
-                    return;
-                }
-                else
-                {
-                    settings.Settings.MMorGMEPrivateKey = layerOneKey;
-                }
+                //if (layerOneKey == "You have entered the wrong passcode... try again!")
+                //{
+                //    Notice = layerOneKey;
+                //    IsEnabled = true;
+                //    return;
+                //}
+                //else
+                //{
+                //    settings.Settings.MMorGMEPrivateKey = layerOneKey;
+                //}
             }
 
             await _accountService.CreateNewAccountAsync(settings, _password);
